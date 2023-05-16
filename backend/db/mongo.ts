@@ -10,7 +10,7 @@ export default class MongoDb {
     },
   });
   private clusterDB = this.client.db('NGcommerce');
-  public mongoCollection = this.clusterDB.collection('registeredUsers');
+  public registeredUsersCollection = this.clusterDB.collection('registeredUsers');
   public run = async () => {
     this.client.connect().then((client: typeof MongoClient) => {
       client

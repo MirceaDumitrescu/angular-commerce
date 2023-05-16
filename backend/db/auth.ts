@@ -2,7 +2,7 @@ import IRegistration from '../interfaces/IRegistration';
 
 import Mongo from './mongo';
 const mongoClass = new Mongo();
-const registerCollection = mongoClass.mongoCollection;
+const registerCollection = mongoClass.registeredUsersCollection;
 
 const createAccount = (userData: IRegistration) => {
   registerCollection.insertOne(userData).then((res: any) => {
