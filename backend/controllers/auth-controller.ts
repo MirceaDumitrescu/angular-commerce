@@ -1,19 +1,16 @@
 import { Request, Response } from 'express';
-import IRegistration from '../interfaces/IRegistration';
-import bcrypt from 'bcryptjs';
 import { UserSchema } from '../models/userSchema';
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const authDb = require('../db/auth');
 
 const registerAccount = async (req: Request, res: Response) => {
   const registrationData = req.body;
-
-  console.log(req.body);
   if (!registrationData) {
     return res.status(400).json({
       status: 'Bad request',
-      msg: 'Request has no body data',
+      msg: 'Request has no body data!',
     });
   }
   if (
@@ -24,19 +21,26 @@ const registerAccount = async (req: Request, res: Response) => {
   ) {
     return res.status(412).json({
       status: 'Precondition failed',
-      msg: 'User data is missing fields !',
+      msg: 'User data is missing fields!',
     });
   }
-
-  const emailExists = await UserSchema.findOne({
-    email: registrationData.email,
-  });
+  const emailExists = await authDb.findAccount(registrationData.email);
   if (emailExists) {
     return res.status(409).json({
       status: 'Conflict',
       msg: 'Email already in use!',
     });
   }
+
+  // const emailExists = await UserSchema.findOne({
+  //   email: registrationData.email,
+  // });
+  // if (emailExists) {
+  //   return res.status(409).json({
+  //     status: 'Conflict',
+  //     msg: 'Email already in use!',
+  //   });
+  // }
 
   const completeRegistrationData = {
     _id: new mongoose.Types.ObjectId(),

@@ -7,7 +7,7 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || '1234';
 const authRoutes = require('./routes/auth-routes');
-const mongoClass = new MongoDb();
+export const mongoClass = new MongoDb();
 
 app.use(express.json());
 
@@ -21,5 +21,3 @@ mongoClass.connect();
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
-
-module.exports = { mongoClass };
