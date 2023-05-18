@@ -1,16 +1,15 @@
 import IRegistration from '../interfaces/IRegistration';
 
-import Mongo from './mongo';
-const mongoClass = new Mongo();
+const mongoClass = require('../index');
 const registerCollection = mongoClass.registeredUsersCollection;
 
-const createAccount = (userData: IRegistration) => {
-  registerCollection.insertOne(userData).then((res: any) => {
-    if (res.acknowledged === true) {
-      console.log('Data inserted in db', res);
-    } else {
-      console.log('Data failed to add to db');
-    }
+const createAccount = (userData: IRegistration): Promise<any> => {
+  console.log(userData);
+  return new Promise((resolve, reject) => {
+    registerCollection
+      .insertOne(userData)
+      .then((res: any) => resolve(res))
+      .catch((error: any) => reject(error));
   });
 };
 
