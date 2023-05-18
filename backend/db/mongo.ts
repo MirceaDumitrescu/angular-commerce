@@ -23,11 +23,9 @@ export default class MongoDb {
     try {
       const dbExists = await this.checkDatabaseExists(this.dbName);
       const database = this.client.db(this.dbName);
-      if (!dbExists) {
-        const collectionsExists = await this.checkCollections(database);
-        if (!collectionsExists) {
-          this.createCollections(database);
-        }
+      const collectionsExists = await this.checkCollections(database);
+      if (!dbExists && !collectionsExists) {
+        this.createCollections(database);
       }
       this.registeredUsersCollection = database.collection('users');
       this.productsCollection = database.collection('products');
