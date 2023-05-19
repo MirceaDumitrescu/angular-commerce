@@ -23,12 +23,17 @@ export default class MongoDb {
     try {
       const dbExists = await this.checkDatabaseExists(this.dbName);
       const database = this.client.db(this.dbName);
-      const collectionsExists = await this.checkCollections(database);
-      if (!dbExists && !collectionsExists) {
-        this.createCollections(database);
+
+      if (!dbExists) {
+        console.log('No DB found, creating DB and collections...');
+        await this.checkCollections(database);
       }
+      console.log('DB created, checking for collections...');
+      await this.checkCollections(database);
       this.registeredUsersCollection = database.collection('users');
       this.productsCollection = database.collection('products');
+
+      console.log('Connected to MongoDB');
     } catch (error) {
       console.error('Error connecting to MongoDB:', error);
     }
@@ -39,14 +44,28 @@ export default class MongoDb {
     return databases.databases.some((database) => database.name === dbNameParam);
   };
 
-  private checkCollections = async (dbParam: Db): Promise<boolean> => {
-    const collections: CollectionInfo[] = await dbParam.listCollections().toArray();
-    const collectionNames: string[] = collections.map((collection: CollectionInfo) => collection.dbName);
-    return collectionNames.includes('users') && collectionNames.includes('products');
+  private checkCollections = async (dbParam: Db): Promise<void> => {
+    const collectionNames = (await dbParam.listCollections().toArray()).map(
+      (collection: CollectionInfo) => collection.dbName
+    );
+
+    const collectionsToCreate: string[] = [];
+    if (!collectionNames.includes('users')) {
+      collectionsToCreate.push('users');
+    }
+    if (!collectionNames.includes('products')) {
+      collectionsToCreate.push('products');
+    }
+
+    for (const collectionName of collectionsToCreate) {
+      await this.createCollections(dbParam, collectionName);
+    }
   };
 
-  private createCollections = async (dbParam: Db): Promise<void> => {
-    await dbParam.createCollection('users');
-    await dbParam.createCollection('products');
+  private createCollections = async (dbParam: Db, collectionName: string): Promise<void> => {
+    const collectionExists = await dbParam.listCollections({ name: collectionName }).hasNext();
+    if (!collectionExists) {
+      await dbParam.createCollection(collectionName);
+    }
   };
 }

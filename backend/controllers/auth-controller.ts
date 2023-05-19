@@ -14,9 +14,9 @@ const registerAccount = async (req: Request, res: Response) => {
     });
   }
   if (
-    !registrationData.email &&
-    !registrationData.firstname &&
-    !registrationData.lastname &&
+    !registrationData.email ||
+    !registrationData.firstname ||
+    !registrationData.lastname ||
     !registrationData.password
   ) {
     return res.status(412).json({
