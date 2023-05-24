@@ -28,7 +28,7 @@ export default class MongoDb {
         console.log('No DB found, creating DB and collections...');
         await this.checkCollections(database);
       }
-      console.log('DB created, checking for collections...');
+      console.log('DB already exists, checking for collections...');
       await this.checkCollections(database);
       this.registeredUsersCollection = database.collection('users');
       this.productsCollection = database.collection('products');
