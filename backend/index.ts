@@ -17,6 +17,10 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 
 mongoClass.connect();
+mongoClass.db.on('error', console.error.bind(console, 'connection error:'));
+mongoClass.db.once('open', () => {
+  console.log('MongoDB Connected...');
+});
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
