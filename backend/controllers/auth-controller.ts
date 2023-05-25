@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
-import { UserSchema } from '../models/userSchema';
+
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 import IUser from '../interfaces/IUser';
+import { UserSchema } from '../models/userSchema';
+
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
