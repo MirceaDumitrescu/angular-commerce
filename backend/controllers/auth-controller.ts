@@ -2,9 +2,7 @@ import { Request, Response } from 'express';
 import { UserSchema } from '../models/userSchema';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import IUser from '../interfaces/IRegistration';
-
-const authDb = require('../db/auth');
+import IUser from '../interfaces/IUser';
 
 const registerAccount = async (req: Request, res: Response) => {
   const registrationData = req.body;
