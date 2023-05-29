@@ -100,7 +100,10 @@ const loginAccount = async (req: Request, res: Response) => {
       secretKey,
       { expiresIn: sessionTime }
     );
-    return res.json(token);
+    res.setHeader('Access-Control-Expose-Headers', '*');
+    res.setHeader('accesstoken', token);
+    res.setHeader('expiryTime', sessionTime);
+    return res.json({ status: 'Success', msg: 'Logged in succesfully' });
   } catch (error) {
     return res.status(400).json({
       status: 'Bad request',
