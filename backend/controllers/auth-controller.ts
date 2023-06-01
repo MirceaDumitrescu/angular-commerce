@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
-import { UserSchema } from '../models/userSchema';
+
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 import IUser from '../interfaces/IUser';
+import { UserSchema } from '../models/userSchema';
+
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const registerAccount = async (req: Request, res: Response) => {
   const registrationData = req.body;
@@ -48,7 +52,7 @@ const registerAccount = async (req: Request, res: Response) => {
   user.password = hashPassword;
   try {
     await user.save();
-    res.status(201).json({
+    return res.status(201).json({
       status: 'Success',
       msg: 'Created account succesfully!',
     });
@@ -63,23 +67,48 @@ const registerAccount = async (req: Request, res: Response) => {
 const loginAccount = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(412).send('One of the fields missing!');
+    return res.status(412).json({
+      status: 'Precondition failed',
+      msg: 'One of the fields missing!',
+    });
   }
   try {
     const user = await UserSchema.findOne({ email });
     if (!user) {
-      return res.status(412).send('User email not found!');
+      return res.status(404).json({
+        status: 'Not found!',
+        msg: 'User email not found!',
+      });
     }
     const validatePassword = await bcrypt.compare(password, user.password as string);
     if (!validatePassword) {
-      return res.status(400).send('Passwords do not match!');
+      return res.status(409).json({
+        status: 'Conflict!',
+        msg: 'Passwords do NOT match!',
+      });
     }
-    // Validate and return the token to the front-end with the following data :
-    // - session time(token expiry time limit)
-    // - token
-    // - not sensitive user data
+    const sessionTime = 3600;
+    const secretKey = crypto.randomBytes(32).toString('hex');
+    const token = jwt.sign(
+      {
+        _id: user.id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        creation_date: user.creation_date,
+      },
+      secretKey,
+      { expiresIn: sessionTime }
+    );
+    res.setHeader('Access-Control-Expose-Headers', '*');
+    res.setHeader('accesstoken', token);
+    res.setHeader('expiryTime', sessionTime);
+    return res.json({ status: 'Success', msg: 'Logged in succesfully' });
   } catch (error) {
-    return res.status(400).send('Error encountered while logging in!');
+    return res.status(400).json({
+      status: 'Bad request',
+      msg: 'Error encountered while logging in!',
+    });
   }
 };
 
