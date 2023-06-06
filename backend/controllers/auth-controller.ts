@@ -3,6 +3,7 @@ import { UserSchema } from '../models/userSchema';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import IUser from '../interfaces/IUser';
+import * as jwt from 'jsonwebtoken';
 
 const registerAccount = async (req: Request, res: Response) => {
   const registrationData = req.body;
@@ -78,6 +79,19 @@ const loginAccount = async (req: Request, res: Response) => {
     // - session time(token expiry time limit)
     // - token
     // - not sensitive user data
+    const sessionTime = 3600;
+    const secretKey = 'Very-secret-key';
+    const tokenData = {
+      _id: user.id,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      creation_date: user.creation_date,
+    };
+    const token = jwt.sign(JSON.stringify(tokenData), secretKey);
+    res.setHeader('Access-Control-Expose-Headers', '*');
+    res.setHeader('Accesstoken', token);
+    res.setHeader('Expirytime', sessionTime);
   } catch (error) {
     return res.status(400).send('Error encountered while logging in!');
   }
