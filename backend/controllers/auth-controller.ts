@@ -75,12 +75,8 @@ const loginAccount = async (req: Request, res: Response) => {
     if (!validatePassword) {
       return res.status(400).send('Passwords do not match!');
     }
-    // Validate and return the token to the front-end with the following data :
-    // - session time(token expiry time limit)
-    // - token
-    // - not sensitive user data
-    const sessionTime = 3600;
-    const secretKey = 'Very-secret-key';
+    const sessionTime = Number(process.env.SESSION_DURATION);
+    const secretKey = process.env.SECRET_KEY;
     const tokenData = {
       _id: user.id,
       email: user.email,
@@ -88,7 +84,7 @@ const loginAccount = async (req: Request, res: Response) => {
       lastname: user.lastname,
       creation_date: user.creation_date,
     };
-    const token = jwt.sign(JSON.stringify(tokenData), secretKey);
+    const token = jwt.sign(JSON.stringify(tokenData), secretKey!);
     res.setHeader('Access-Control-Expose-Headers', '*');
     res.setHeader('Accesstoken', token);
     res.setHeader('Expirytime', sessionTime);

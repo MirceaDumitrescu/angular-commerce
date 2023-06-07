@@ -3,31 +3,12 @@ import { ProductSchema } from '../models/productSchema';
 import mongoose from 'mongoose';
 import IProdcuts from '../interfaces/IProducts';
 
-const postProduct = async (req: Request, res: Response) => {
+const addProduct = async (req: Request, res: Response) => {
   const productData = req.body;
   if (!productData) {
     return res.status(400).json({
       status: 'Bad request',
       msg: 'Request has no body data!',
-    });
-  }
-  if (
-    !productData.title ||
-    !productData.categories ||
-    !productData.sku ||
-    !productData.stock ||
-    !productData.price ||
-    !productData.long_description ||
-    !productData.short_description ||
-    !productData.images ||
-    !productData.thumbnail ||
-    !productData.supplier ||
-    !productData.weight ||
-    !productData.dimensions
-  ) {
-    return res.status(412).json({
-      status: 'Precondition failed',
-      msg: 'Product data is missing fields!',
     });
   }
   const productExists = await ProductSchema.findOne({
@@ -145,4 +126,4 @@ const deleteProduct = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = { postProduct, getProduct, updateProduct, deleteProduct };
+module.exports = { addProduct, getProduct, updateProduct, deleteProduct };
