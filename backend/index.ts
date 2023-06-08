@@ -6,11 +6,15 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || '1234';
+
 const authRoutes = require('./routes/auth-routes');
+const productRoutes = require('./routes/product-routes');
+
 
 const validation = require('./utilValidation/joiValidation');
 const { registerValidation } = require('./schemaValidation/registerValidation');
 const { loginValidation } = require('./schemaValidation/loginValidation');
+
 export const mongoClass = new MongoDb();
 
 app.use(express.json());
@@ -19,6 +23,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
 
 app.post("/", validation(registerValidation), (req,res)=> {
   const {username, email, password, confirmPassword} = req.body;

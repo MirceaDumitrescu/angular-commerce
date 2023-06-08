@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
-
-import mongoose from 'mongoose';
-import IUser from '../interfaces/IUser';
 import { UserSchema } from '../models/userSchema';
-
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import IUser from '../interfaces/IUser';
+import * as jwt from 'jsonwebtoken';
 
 const registerAccount = async (req: Request, res: Response) => {
   const registrationData = req.body;
@@ -87,23 +84,21 @@ const loginAccount = async (req: Request, res: Response) => {
         msg: 'Passwords do NOT match!',
       });
     }
-    const sessionTime = 3600;
-    const secretKey = crypto.randomBytes(32).toString('hex');
-    const token = jwt.sign(
-      {
-        _id: user.id,
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        creation_date: user.creation_date,
-      },
-      secretKey,
-      { expiresIn: sessionTime }
-    );
+
+    const sessionTime = Number(process.env.SESSION_DURATION);
+    const secretKey = process.env.SECRET_KEY;
+    const tokenData = {
+      _id: user.id,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      creation_date: user.creation_date,
+    };
+    const token = jwt.sign(JSON.stringify(tokenData), secretKey!);
     res.setHeader('Access-Control-Expose-Headers', '*');
-    res.setHeader('accesstoken', token);
-    res.setHeader('expiryTime', sessionTime);
-    return res.json({ status: 'Success', msg: 'Logged in succesfully' });
+    res.setHeader('Accesstoken', token);
+    res.setHeader('Expirytime', sessionTime);
+
   } catch (error) {
     return res.status(400).json({
       status: 'Bad request',
