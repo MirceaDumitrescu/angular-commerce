@@ -1,12 +1,24 @@
 import { Request, Response } from 'express';
 import { UserSchema } from '../models/userSchema';
+
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 import IUser from '../interfaces/IUser';
+
+import bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+
+import { registerValidation } from '../schemaValidation/registerValidation';
+import { loginValidation } from '../schemaValidation/loginValidation';
 
 const registerAccount = async (req: Request, res: Response) => {
   const registrationData = req.body;
+  const { error } = registerValidation(registrationData);
+  if (error) {
+    return res.status(422).json({
+      status: 'Unprocessable entity',
+      msg: 'Invalid data provided',
+    });
+  }
   if (!registrationData) {
     return res.status(400).json({
       status: 'Bad request',
@@ -63,7 +75,8 @@ const registerAccount = async (req: Request, res: Response) => {
 
 const loginAccount = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  if (!email || !password) {
+  const { error } = loginValidation(req.body);
+  if (!email || !password || error) {
     return res.status(412).json({
       status: 'Precondition failed',
       msg: 'One of the fields missing!',
@@ -89,16 +102,20 @@ const loginAccount = async (req: Request, res: Response) => {
     const secretKey = process.env.SECRET_KEY;
     const tokenData = {
       _id: user.id,
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      creation_date: user.creation_date,
     };
     const token = jwt.sign(JSON.stringify(tokenData), secretKey!);
     res.setHeader('Access-Control-Expose-Headers', '*');
     res.setHeader('Accesstoken', token);
     res.setHeader('Expirytime', sessionTime);
-
+    res.status(200).json({
+      status: 'success',
+      token: token,
+      userData: {
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      },
+    });
   } catch (error) {
     return res.status(400).json({
       status: 'Bad request',
