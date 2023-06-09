@@ -9,11 +9,7 @@ const port = process.env.PORT || '1234';
 
 const authRoutes = require('./routes/auth-routes');
 const productRoutes = require('./routes/product-routes');
-
-
-const validation = require('./utilValidation/joiValidation');
-const { registerValidation } = require('./schemaValidation/registerValidation');
-const { loginValidation } = require('./schemaValidation/loginValidation');
+const orderRoutes = require('./routes/order-routes');
 
 export const mongoClass = new MongoDb();
 
@@ -24,16 +20,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-
-app.post("/", validation(registerValidation), (req,res)=> {
-  const {username, email, password, confirmPassword} = req.body;
-  res.send(`username: ${username}, email: ${email}, password: ${password}, confirmPassword: ${confirmPassword}`);
-})
-
-app.post("/", validation(loginValidation), (req,res)=> {
-  const {username, email, password} = req.body;
-  res.send(`username: ${username}, email: ${email}, password: ${password}`);
-})
+app.use('/api/checkout', orderRoutes);
 
 mongoClass.connect();
 mongoClass.db.on('error', console.error.bind(console, 'connection error:'));
