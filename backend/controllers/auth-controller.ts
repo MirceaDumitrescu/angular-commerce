@@ -76,7 +76,7 @@ const registerAccount = async (req: Request, res: Response) => {
 const loginAccount = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const { error } = loginValidation(req.body);
-  if (!email || !password || error) {
+  if (!email || !password) {
     return res.status(412).json({
       status: 'Precondition failed',
       msg: 'One of the fields missing!',
@@ -98,15 +98,12 @@ const loginAccount = async (req: Request, res: Response) => {
       });
     }
 
-    const sessionTime = Number(process.env.SESSION_DURATION);
+    const sessionTime = process.env.SESSION_DURATION;
     const secretKey = process.env.SECRET_KEY;
     const tokenData = {
       _id: user.id,
     };
-    const token = jwt.sign(JSON.stringify(tokenData), secretKey!);
-    res.setHeader('Access-Control-Expose-Headers', '*');
-    res.setHeader('Accesstoken', token);
-    res.setHeader('Expirytime', sessionTime);
+    const token = jwt.sign(tokenData, secretKey!, { expiresIn: sessionTime });
     res.status(200).json({
       status: 'success',
       token: token,
@@ -120,6 +117,7 @@ const loginAccount = async (req: Request, res: Response) => {
     return res.status(400).json({
       status: 'Bad request',
       msg: 'Error encountered while logging in!',
+      error: error,
     });
   }
 };
@@ -160,7 +158,7 @@ const getUserData = async (req: Request, res: Response) => {
 const updateUserData = async (req: Request, res: Response) => {
   const userID = req.params.id;
   const newUserData = req.body;
-  const updateObject: IUser = {};
+  const updateObject = {} as IUser;
   Object.keys(newUserData).forEach((key: string) => {
     updateObject[key as keyof IUser] = newUserData[key];
   });

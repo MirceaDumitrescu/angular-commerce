@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import MongoDb from './db/mongo';
+import { validateJWT, validateMidllewareJWT } from './controllers/validate-controller';
 
 dotenv.config();
 
@@ -19,8 +20,10 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/checkout', orderRoutes);
+app.use('/api/products', validateMidllewareJWT, productRoutes);
+app.use('/api/checkout', validateMidllewareJWT, orderRoutes);
+
+app.get('/api/validate', validateJWT);
 
 mongoClass.connect();
 mongoClass.db.on('error', console.error.bind(console, 'connection error:'));

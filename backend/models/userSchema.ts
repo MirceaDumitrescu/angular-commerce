@@ -50,6 +50,10 @@ const userSchema = new mongoose.Schema({
   last_ip: {
     type: String,
   },
+  role: {
+    type: String,
+    default: 'user',
+  },
 });
 
 export const UserSchema = mongoose.model('users', userSchema);

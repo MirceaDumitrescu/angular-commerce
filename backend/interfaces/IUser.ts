@@ -1,8 +1,8 @@
 export default interface IUser {
-  email?: string;
-  firstname?: string;
-  lastname?: string;
-  password?: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
   creation_date?: string;
   order_history?: any;
   total_spent?: number;
@@ -12,4 +12,5 @@ export default interface IUser {
   phone?: number;
   sex?: string;
   age?: number;
+  role?: string;
 }
