@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.flexRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.app__container {
+  position: relative;
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+.navigation__container {
+  position: sticky;
+  background-color: white;
+  top: 0;
+  height: 17%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.pages__container {
+  height: 83%;
+}
+
+.footer__container {
+  height: 81%;
+  background-color: rgb(30, 30, 30);
+  color: white;
+}

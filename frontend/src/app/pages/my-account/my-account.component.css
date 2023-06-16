@@ -1,0 +1,48 @@
+.account__container {
+  height: 100%;
+  padding-left: 10%;
+}
+
+/* ACCOUNT HEADER */
+.account__header__container {
+  height: 15%;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.account__header-title {
+  width: 20%;
+  text-align: center;
+  font-size: 2.5rem;
+  user-select: none;
+}
+
+/* ACCOUNT MAIN CONTENT AREA */
+.account__content__wrapper {
+  height: 85%;
+}
+
+/* ACCOUNT MAIN CONTENT NAVIGATION */
+
+.account__content__navigation__container {
+  height: 100%;
+  width: 20%;
+}
+
+.account__navigation__list {
+  margin-top: 35%;
+  padding-left: 10%;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+.account__navigation__list-item {
+  font-size: 1.25rem;
+  list-style: none;
+  cursor: pointer;
+}
+/* ACCOUNT MAIN CONTENT ROUTER AREA */
+.account__content__area__container {
+  height: 100%;
+  width: 80%;
+  border: 1px solid black;
+}
