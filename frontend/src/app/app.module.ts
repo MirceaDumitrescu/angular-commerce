@@ -27,6 +27,11 @@ const pages = [
   CategoriesComponent,
   ProductComponent,
   CheckoutComponent,
+  DashboardComponent,
+  OrdersComponent,
+  PaymentMethodsComponent,
+  FavouritesComponent,
+  AddressesComponent,
 ];
 const components = [
   NavigationComponent,
@@ -35,7 +40,7 @@ const components = [
 ];
 
 @NgModule({
-  declarations: [...pages, ...components, DashboardComponent, OrdersComponent, PaymentMethodsComponent, FavouritesComponent, AddressesComponent],
+  declarations: [...pages, ...components],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],
