@@ -1,1 +1,138 @@
-<p>auth works!</p>
+<h1><strong>MY ACCOUNT</strong></h1>
+<mat-card class="slider-card">
+
+  <mat-tab-group>
+    <mat-tab label="Login">
+      <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" >
+
+        <mat-form-field class="form__field-wrapper">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            placeholder="Enter your email"
+            value=""
+            formControlName="email"
+          />
+          <mat-icon matPrefix>mail</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')!.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form__field-wrapper">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            placeholder="Enter your password"
+            value=""
+            formControlName="password"
+          />
+          <mat-icon matPrefix>vpn_key</mat-icon>
+          <mat-error *ngIf="loginForm.get('password')!.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        </form>
+        <mat-checkbox class="checkbox-margin">Remember me</mat-checkbox>
+      <a class="forgoten" routerLink="/forgot-password">Forgot Password?</a>
+      <button type="submit" class="btn" mat-button color="primary" >SIGN IN</button>
+      </mat-tab>
+
+      
+    <mat-tab label="Sign Up">
+      <form [formGroup]="registerForm" (ngSubmit)="submitRegistration()" >
+
+  <mat-form-field class="form__field-wrapper">
+    <mat-label>Email</mat-label>
+    <input
+      type="email"
+      matInput
+      placeholder="Enter your email"
+      value=""
+      formControlName="email"
+    />
+    <mat-icon matPrefix>mail</mat-icon>
+    <mat-error *ngIf="registerForm.get('email')!.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__field-wrapper">
+    <mat-label>First Name</mat-label>
+    <input
+      type="text"
+      matInput
+      placeholder="Enter your firstname"
+      value=""
+      formControlName="firstname"
+    />
+    <mat-icon matPrefix>person</mat-icon>
+    <mat-error *ngIf="registerForm.get('firstname')!.hasError('required')">
+      First Name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__field-wrapper" cellspacing="0">
+    <mat-label>Last Name</mat-label>
+    <input
+      type="text"
+      matInput
+      placeholder="Enter your lastname"
+      value=""
+      formControlName="lastname"
+    />
+    <mat-icon matPrefix>person</mat-icon>
+    <mat-error *ngIf="registerForm.get('lastname')!.hasError('required')">
+      Last Name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__field-wrapper">
+    <mat-label>Password</mat-label>
+    <input
+      type="password"
+      matInput
+      placeholder="Enter your password"
+      value=""
+      formControlName="password"
+    />
+    <mat-icon matPrefix>vpn_key</mat-icon>
+    <mat-error *ngIf="registerForm.get('password')!.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__field-wrapper">
+    <mat-label>Confirm Password</mat-label>
+    <input
+      type="password"
+      matInput
+      placeholder="Enter your confirmPassword"
+      value=""
+      formControlName="confirmPassword"
+    />
+    <mat-icon matPrefix>vpn_key</mat-icon>
+    <mat-error *ngIf="registerForm.get('confirmPassword')!.hasError('required')">
+      Confirm Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+    <section class="check-section">
+        <mat-checkbox class="checkbox-margin">Subscribe to our newsletter</mat-checkbox>
+    </section>
+
+    <section class="check-section">
+        <mat-checkbox class="checkbox-margin">I accept the Terms of Service and Privacy Policy</mat-checkbox>
+    </section>
+    <button  type="submit" class="btn" mat-button color="primary" >SIGN UP</button>
+    </form>
+      
+    </mat-tab>
+  </mat-tab-group>
+  
+</mat-card>
+
+
+
+

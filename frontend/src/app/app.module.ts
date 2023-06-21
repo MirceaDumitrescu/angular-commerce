@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +19,14 @@ import { OrdersComponent } from './pages/my-account/orders/orders.component';
 import { PaymentMethodsComponent } from './pages/my-account/payment-methods/payment-methods.component';
 import { FavouritesComponent } from './pages/my-account/favourites/favourites.component';
 import { AddressesComponent } from './pages/my-account/addresses/addresses.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 const pages = [
   AppComponent,
@@ -41,7 +50,20 @@ const components = [
 
 @NgModule({
   declarations: [...pages, ...components],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserModule, 
+    AppRoutingModule, 
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatTabsModule,
+    MatInputModule,
+    FormsModule,
+    MatIconModule,
+    MatCheckboxModule
+  
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
