@@ -1,1 +1,54 @@
-<p>dashboard works!</p>
+<section class="dashboard__details__container">
+  <form
+    [formGroup]="dashboardForm"
+    class="dashboard__form__container flexColumn"
+  >
+    <div class="dashboard__input__container flexColumn">
+      <label for="email">Email</label>
+      <input placeholder="email" formControlName="email" />
+    </div>
+    <section class="dashboard__fullname__wrapper flexRow">
+      <div class="dashboard__input__container flexColumn">
+        <label for="firstname">Firstname</label>
+        <input placeholder="firstname" formControlName="firstname" />
+      </div>
+      <div class="dashboard__input__container flexColumn">
+        <label for="lastname">Lastname</label>
+        <input placeholder="lastname" formControlName="lastname" />
+      </div>
+    </section>
+    <div class="dashboard__input__container flexColumn">
+      <label for="age">Age</label>
+      <input placeholder="age" formControlName="age" />
+    </div>
+    <div class="dashboard__input__container flexColumn">
+      <label for="sex">Sex</label>
+      <input placeholder="sex" formControlName="sex" />
+    </div>
+    <div class="dashboard__input__container flexColumn">
+      <label for="phone">Phone</label>
+      <input placeholder="phone" formControlName="phone" />
+    </div>
+    <div class="dashboard__input__container flexColumn">
+      <label for="address">Address</label>
+      <input placeholder="address" formControlName="address" />
+    </div>
+    <section class="dashboard__passwords__wrapper">
+      <div class="dashboard__input__container flexColumn">
+        <label for="phone">Old Password</label>
+        <input placeholder="oldPassword" formControlName="oldPassword" />
+      </div>
+      <div class="dashboard__input__container flexColumn">
+        <label for="newPassword">New Password</label>
+        <input placeholder="newPassword" formControlName="newPassword" />
+      </div>
+      <div class="dashboard__input__container flexColumn">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input
+          placeholder="confirmPassword"
+          formControlName="confirmPassword"
+        />
+      </div>
+    </section>
+  </form>
+</section>

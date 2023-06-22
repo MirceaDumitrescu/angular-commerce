@@ -30,7 +30,6 @@
 }
 
 .account__navigation__list {
-  margin-top: 35%;
   padding-left: 10%;
   gap: 1.5rem;
   align-items: flex-start;
@@ -44,5 +43,4 @@
 .account__content__area__container {
   height: 100%;
   width: 80%;
-  border: 1px solid black;
 }

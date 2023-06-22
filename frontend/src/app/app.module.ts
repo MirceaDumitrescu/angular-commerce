@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,7 @@ import { FooterComponent } from './components/footer/footer.component';
 
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { AuthComponent } from './pages/auth/auth.component';
+
 import { MyAccountComponent } from './pages/my-account/my-account.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { ProductComponent } from './pages/product/product.component';
@@ -19,6 +21,7 @@ import { PaymentMethodsComponent } from './pages/my-account/payment-methods/paym
 import { FavouritesComponent } from './pages/my-account/favourites/favourites.component';
 import { AddressesComponent } from './pages/my-account/addresses/addresses.component';
 
+import { MatInputModule } from '@angular/material/input';
 const pages = [
   AppComponent,
   HomepageComponent,
@@ -39,9 +42,16 @@ const components = [
   FooterComponent,
 ];
 
+const materialModules = [MatInputModule];
+const modules = [
+  BrowserModule,
+  AppRoutingModule,
+  FormsModule,
+  ReactiveFormsModule,
+];
 @NgModule({
   declarations: [...pages, ...components],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [...modules, ...materialModules],
   providers: [],
   bootstrap: [AppComponent],
 })

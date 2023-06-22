@@ -1,0 +1,19 @@
+.dashboard__details__container {
+  /* margin: 5% 0%; */
+}
+/* Form Inputs  */
+.dashboard__form__container {
+  gap: 5rem;
+  background-color: red;
+}
+.dashboard__input__container {
+  width: 70%;
+  gap: 1rem;
+}
+
+.dashboard__input__container > input {
+  width: 100%;
+}
+.dashboard__fullname__wrapper {
+  width: 100%;
+}
