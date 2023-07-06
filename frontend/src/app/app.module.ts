@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotifierComponent } from './pages/notifier/notifier.component';
 
 
 const pages = [
@@ -50,7 +51,7 @@ const components = [
 ];
 
 @NgModule({
-  declarations: [...pages, ...components],
+  declarations: [...pages, ...components, NotifierComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,
