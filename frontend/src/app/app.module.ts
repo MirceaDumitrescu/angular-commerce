@@ -26,6 +26,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 
 const pages = [
@@ -61,7 +63,8 @@ const components = [
     MatInputModule,
     FormsModule,
     MatIconModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBarModule
   
   ],
   providers: [],

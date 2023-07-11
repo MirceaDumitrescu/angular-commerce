@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotifierService } from 'src/app/services/notifier.service';
 
 @Component({
   selector: 'app-auth',
@@ -9,8 +10,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class AuthComponent {
 
-  
-  constructor (private AuthService: AuthService) { }
+  constructor (
+                private AuthService: AuthService,
+                private notifierService: NotifierService
+    ) { }
 
   registerForm = new FormGroup ({
 
@@ -24,21 +27,52 @@ export class AuthComponent {
 
   }) 
 
-
   loginForm = new FormGroup ({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required, Validators.minLength(6)]),
   })
 
-  submitRegistration = () => {
-    console.log(this.registerForm.value)
+  submitRegistration = async () => {
+    console.log(this.registerForm.value);
 
-    this.AuthService.register(this.registerForm.value)
+    this.registerForm.markAllAsTouched();
+    
+    if (this.registerForm.invalid) {
+      return this.notifierService.openErrorSnack('Invalid data inputs');
+    }
+  
+    try {
+      await this.AuthService.register(this.registerForm.value);
+      this.notifierService.openSuccessSnack('Registration Successful');
+    } catch (error) {
+      this.notifierService.openErrorSnack('Registration Failed');
+    }
   }
+  
+  submitLogin = async () => {
+    console.log(this.loginForm.value);
 
-  submitLogin = () => {
-    console.log(this.loginForm.value)
+    this.loginForm.markAllAsTouched();
+    
+    if (this.loginForm.invalid) {
+      return this.notifierService.openErrorSnack('Invalid data inputs');
+    }
+  
+    try {
 
-    this.AuthService.login(this.loginForm.value)
+      await this.AuthService.login(this.loginForm.value);
+      this.notifierService.openSuccessSnack('Login Successful');
+      
+    } catch (error) {
+      this.notifierService.openErrorSnack('Login Failed');
+    }
   }
+  
 }
+
+
+
+
+
+
+

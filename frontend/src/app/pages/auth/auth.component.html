@@ -3,7 +3,7 @@
 
   <mat-tab-group>
     <mat-tab label="Login">
-      <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" >
+      <form [formGroup]="loginForm" (ngSubmit)="submitLogin()"  >
 
         <mat-form-field class="form__field-wrapper">
           <mat-label>Email</mat-label>
@@ -37,7 +37,7 @@
         </form>
         <mat-checkbox class="checkbox-margin">Remember me</mat-checkbox>
       <a class="forgoten" routerLink="/forgot-password">Forgot Password?</a>
-      <button type="submit" class="btn" mat-button color="primary" >SIGN IN</button>
+      <button type="submit" class="btn" mat-button color="primary"  >SIGN IN</button>
       </mat-tab>
 
       
