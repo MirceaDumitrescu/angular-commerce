@@ -2,68 +2,45 @@ import { Request, Response } from 'express';
 import { ProductSchema } from '../models/productSchema';
 import mongoose from 'mongoose';
 import IProdcuts from '../interfaces/IProducts';
+import { sendResponse } from './utility-controller';
 
 const addProduct = async (req: Request, res: Response) => {
   const productData = req.body;
-  if (!productData) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no body data!',
-    });
-  }
-  const productExists = await ProductSchema.findOne({
-    sku: productData.sku,
-  });
 
-  if (productExists) {
-    return res.status(409).json({
-      status: 'Conflict',
-      msg: 'Product already exists!',
-    });
-  }
-  const product = new ProductSchema({
-    _id: new mongoose.Types.ObjectId(),
-    ...productData,
-  });
   try {
+    if (!productData) throw new Error('Request has no body data!');
+
+    const productExists = await ProductSchema.findOne({
+      sku: productData.sku,
+    });
+
+    if (productExists) throw new Error('Product already exists!');
+
+    const product = new ProductSchema({
+      _id: new mongoose.Types.ObjectId(),
+      ...productData,
+    });
+
     await product.save();
-    res.status(201).json({
-      status: 'Success',
-      msg: 'Created product succesfully!',
-    });
+
+    return sendResponse(res, 201, { statusText: 'Success', message: 'Created product succesfully!' });
   } catch (error) {
-    res.status(400).json({
-      status: 'Request failed ',
-      msg: `${error}`,
-    });
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
   }
 };
+
 const getProduct = async (req: Request, res: Response) => {
   const productID = req.params.id;
-  if (!productID) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no ID parameter!',
-    });
-  }
+
   try {
+    if (!productID) throw new Error('Request has no ID parameter!');
+
     const productData = await ProductSchema.findOne({ _id: productID });
-    if (!productData) {
-      return res.status(404).json({
-        status: 'Not found!',
-        msg: `No product data associated with the ID`,
-      });
-    }
-    return res.status(200).json({
-      status: 'Success',
-      msg: 'Got product data!',
-      data: productData,
-    });
+    if (!productData) throw new Error('No product data associated with the ID');
+
+    return sendResponse(res, 200, { statusText: 'Ok', message: 'Got product data!' });
   } catch (error) {
-    res.status(412).json({
-      status: `Wrong ID format provided`,
-      msg: `${error}`,
-    });
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
   }
 };
 const updateProduct = async (req: Request, res: Response) => {
@@ -73,56 +50,31 @@ const updateProduct = async (req: Request, res: Response) => {
   Object.keys(newUserData).forEach((key: string) => {
     updateObject[key as keyof IProdcuts] = newUserData[key];
   });
-  if (!productID) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no ID parameter!',
-    });
-  }
-  if (!newUserData || Object.keys(newUserData).length < 1) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no body data!',
-    });
-  }
+
   try {
+    if (!productID) throw new Error('Request has no ID parameter!');
+
+    if (!newUserData || Object.keys(newUserData).length < 1) throw new Error('Request has no body data!');
+
     const updateResult = await ProductSchema.updateOne({ _id: productID }, { $set: updateObject });
-    if (!updateResult.acknowledged) {
-      return res.status(404).json({
-        status: 'Failed',
-        msg: 'Update failed!',
-      });
-    }
-    return res.status(200).json({
-      status: 'Success',
-      msg: 'Product data updated!',
-    });
+    if (!updateResult.acknowledged) throw new Error('Update failed!');
+
+    return sendResponse(res, 200, { statusText: 'Ok!', message: 'Product data updated!' });
   } catch (error) {
-    res.status(400).json({
-      status: `Error encountered`,
-      msg: `${error}`,
-    });
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
   }
 };
 const deleteProduct = async (req: Request, res: Response) => {
   const productID = req.params.id;
-  if (!productID) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no ID parameter!',
-    });
-  }
+
   try {
+    if (!productID) throw new Error('Request has no ID parameter!');
+
     await ProductSchema.deleteOne({ _id: productID });
-    return res.status(200).json({
-      status: 'Success',
-      msg: 'Product deleted succesfully!',
-    });
+
+    return sendResponse(res, 200, { statusText: 'Ok!', message: 'Product deleted succesfully!' });
   } catch (error) {
-    res.status(400).json({
-      status: `Error encountered`,
-      msg: `${error}`,
-    });
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
   }
 };
 
