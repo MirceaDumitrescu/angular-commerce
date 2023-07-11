@@ -26,10 +26,6 @@ const routes: Routes = [
     component: AuthComponent,
   },
   {
-    path: 'notifier',
-    component: AuthComponent,
-  },
-  {
     path: 'my-account',
     component: MyAccountComponent,
     children: [
