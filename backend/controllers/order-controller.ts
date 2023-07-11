@@ -2,37 +2,33 @@ import { Request, Response } from 'express';
 import { OrderSchema } from '../models/orderSchema';
 import mongoose from 'mongoose';
 import IOrder from '../interfaces/IOrder';
+import { sendResponse } from './utility-controller';
 
 const createOrder = async (req: Request, res: Response) => {
   const orderData = req.body;
-  if (!orderData) {
-    res.status(404).json({
-      success: 'Order data not found',
-    });
-  }
-  orderData._id = new mongoose.Types.ObjectId();
-  const order = new OrderSchema(orderData);
   try {
+    if (!orderData) throw new Error(`Order data not found`);
+
+    orderData._id = new mongoose.Types.ObjectId();
+    const order = new OrderSchema(orderData);
     await order.save();
-    res.status(200).json({
-      success: 'Great creation',
-      data: orderData,
-    });
+
+    return sendResponse(res, 201, { statusText: 'Created', message: 'Created order succesfully!', data: orderData });
   } catch (error) {
-    res.status(400).json({
-      success: 'Bad request',
-      error: error,
-    });
+    return sendResponse(res, 400, { statusText: 'Bad request!', message: `${error}` });
   }
 };
 
 const getOrderData = async (req: Request, res: Response) => {
   const orderID = req.params.id;
-  const order = await OrderSchema.findById(orderID);
-  res.status(200).json({
-    success: 'Great get data',
-    data: order,
-  });
+  try {
+    if (!orderID) throw new Error('Request has no ID parameter!');
+
+    const order = await OrderSchema.findById(orderID);
+    return sendResponse(res, 200, { statusText: 'Ok', message: 'Got order data', data: order });
+  } catch (error) {
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
+  }
 };
 
 const updateOrder = async (req: Request, res: Response) => {
@@ -42,51 +38,29 @@ const updateOrder = async (req: Request, res: Response) => {
   Object.keys(newOrderData).forEach((key: string) => {
     updateObject[key as keyof IOrder] = newOrderData[key];
   });
-  if (!orderID) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no ID parameter!',
-    });
-  }
-  if (!newOrderData || Object.keys(newOrderData).length < 1) {
-    return res.status(400).json({
-      status: 'Bad request',
-      msg: 'Request has no body data!',
-    });
-  }
-  const orderData = await OrderSchema.findOne({ _id: orderID });
-  if (!orderData) {
-    return res.status(404).json({
-      status: 'Not found!',
-      msg: `No Order data associated with the ID`,
-    });
-  }
   try {
+    if (!orderID) throw new Error('Request has no ID parameter!');
+    if (!newOrderData || Object.keys(newOrderData).length < 1) throw new Error('Request has no body data!');
+
+    const orderData = await OrderSchema.findOne({ _id: orderID });
+    if (!orderData) throw new Error(`No Order data associated with the ID`);
+
     const updateResult = await OrderSchema.updateOne({ _id: orderID }, { $set: updateObject });
-    if (!updateResult.acknowledged) {
-      return res.status(404).json({
-        status: 'Failed',
-        msg: 'Update failed!',
-      });
-    }
-    return res.status(200).json({
-      status: 'Success',
-      msg: 'Order data updated!',
-    });
+    if (!updateResult.acknowledged) throw new Error(`'Update failed!`);
+
+    return sendResponse(res, 200, { statusText: 'Success', message: 'Order data updated!' });
   } catch (error) {
-    res.status(400).json({
-      status: `Error encountered`,
-      msg: `${error}`,
-    });
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
   }
 };
 const deleteOrder = async (req: Request, res: Response) => {
   const orderID = req.params.id;
-  const deleteOrder = await OrderSchema.findByIdAndDelete(orderID);
-  res.status(200).json({
-    success: 'Great delete',
-    data: deleteOrder,
-  });
+  try {
+    await OrderSchema.findByIdAndDelete(orderID);
+    return sendResponse(res, 200, { statusText: 'Success', message: 'Deleted an order entry' });
+  } catch (error) {
+    return sendResponse(res, 400, { statusText: 'Bad request', message: `${error}` });
+  }
 };
 
 module.exports = { createOrder, getOrderData, updateOrder, deleteOrder };

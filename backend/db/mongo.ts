@@ -1,6 +1,5 @@
-import { Collection, CollectionInfo, Db, Document, MongoClient, ServerApiVersion } from 'mongodb';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 dotenv.config();
 
 export default class MongoDb {
@@ -14,5 +13,20 @@ export default class MongoDb {
     } catch (error) {
       console.log('Error connecting to mongo:', error);
     }
+  };
+
+  public find = async (schema: any, query: {}) => {
+    return await schema.findOne(query);
+  };
+  public update = async (schema: any, query: {}, newData: any) => {
+    return await schema.updateOne(query, { $set: newData });
+  };
+  public delete = async (schema: any, query: {}) => {
+    return await schema.deleteOne(query);
+  };
+
+  public add = async (schema: any, entryData: any) => {
+    const data = new schema(entryData);
+    return data.save();
   };
 }
